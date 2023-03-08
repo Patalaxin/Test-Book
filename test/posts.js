@@ -1,10 +1,9 @@
-import supertest from "supertest";
 import { expect } from "chai";
+import request from "../config/common.js";
 import { createRandomUser } from "../helper/user_helper.js";
+import { faker } from '@faker-js/faker';
 
-
-const request = supertest('https://gorest.co.in/public/v2/')
-const token = '83913acf66c386030b85a03d70c68b887aae619b1938b3079f91374b3147d386'
+const token = process.env.USER_TOKEN
 
 describe('User Posts', () => {
     let userID;
@@ -14,25 +13,25 @@ describe('User Posts', () => {
     });
 
     describe('Positive Tests', () => {
-        it('/posts', async () => {
+        it.only('/posts', async () => {
             const data = {
                 user_id: userID,
-                title: "smth new with this title",
-                body: "whats up"
+                title: faker.lorem.word(),
+                body: faker.lorem.sentence()
             }
                         
             const postsRes = await request
                 .post('posts')
                 .set('Authorization', `Bearer ${token}`)
                 .send(data)
-    
-                expect(postsRes.body.body).to.eql('whats up')
+
+                expect(postsRes.body.body).to.eql(data.body)
                 expect(postsRes.body.user_id).to.eql(userID)
         });
     });
 
     describe('Negative Tests', () => {
-        it.only('401 Authentication Failed', async () => {
+        it('401 Authentication Failed', async () => {
             const data = {
                 user_id: userID,
                 title: "smth new with this title",

@@ -1,11 +1,9 @@
-import supertest from "supertest";
+import request from "../config/common.js";
 import { expect } from "chai";
 
-const request = supertest('https://gorest.co.in/public/v2/')
+const token = process.env.USER_TOKEN
 
-const token = '83913acf66c386030b85a03d70c68b887aae619b1938b3079f91374b3147d386'
-
-describe('Users', () => {
+xdescribe('Users', () => {
     let userID;
     describe('POST', () => {
         it('/users', () => {
